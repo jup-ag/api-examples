@@ -1,0 +1,11 @@
+node_modules
+.next
+.turbo
+.env
+.env.local
+dist
+*.tsbuildinfo
+.agents
+.claude
+apps/prediction-markets/tweets
+apps/prediction-markets/API_FEEDBACK.md
