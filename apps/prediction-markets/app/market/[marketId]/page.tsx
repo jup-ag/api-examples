@@ -11,11 +11,12 @@ import { MarketsTable } from "@/components/markets-table";
 import { OrderbookChart } from "@/components/orderbook-chart";
 import { TradePanel } from "@/components/trade-panel";
 import { RelatedEvents } from "@/components/related-events";
+import { OrdersList } from "@/components/orders-list";
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { EmptyState } from "@/components/empty-state";
-import { useMarket, useEventMarkets } from "@/hooks/use-markets";
+import { useMarket, useEventMarkets, useForecast } from "@/hooks/use-markets";
 import { useEvent } from "@/hooks/use-events";
-import { formatNumber, countdown } from "@/lib/utils";
+import { formatNumber, countdown, toRawUsd } from "@/lib/utils";
 
 export default function MarketPage({ params }: { params: Promise<{ marketId: string }> }) {
   const { marketId } = use(params);
@@ -25,6 +26,7 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
   const { data: market, isLoading, error } = useMarket(marketId);
   const { data: event } = useEvent(eventId ?? "");
   const { data: allMarkets } = useEventMarkets(eventId ?? "");
+  const { data: forecast } = useForecast();
 
   if (isLoading) {
     return (
@@ -43,11 +45,11 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
     return <EmptyState card message="Market not found" />;
   }
 
-  const yesPrice = (market.pricing.buyYesPriceUsd ?? 500000) / 1_000_000;
-  const noPrice = (market.pricing.buyNoPriceUsd ?? 500000) / 1_000_000;
+  const yesPrice = toRawUsd(market.pricing.buyYesPriceUsd ?? 500000);
+  const noPrice = toRawUsd(market.pricing.buyNoPriceUsd ?? 500000);
   const hasMultipleMarkets = allMarkets && allMarkets.length > 1;
   const eventVolume = event?.volumeUsd
-    ? formatNumber(Number(event.volumeUsd) / 1_000_000)
+    ? formatNumber(toRawUsd(event.volumeUsd))
     : formatNumber(market.pricing.volume);
 
   return (
@@ -95,10 +97,10 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
       </div>
 
       {/* Volume + Close time summary */}
-      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-        <span className="font-medium text-foreground">${eventVolume} vol</span>
+      <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
+        <span className="font-mono font-medium text-foreground">${eventVolume} vol</span>
         {market.pricing.liquidityDollars != null && (
-          <span>${formatNumber(market.pricing.liquidityDollars / 1_000_000)} liquidity</span>
+          <span>${formatNumber(toRawUsd(market.pricing.liquidityDollars))} liquidity</span>
         )}
         <span>Closes {countdown(market.closeTime)}</span>
         <Badge variant={market.status === "open" ? "default" : "secondary"} className="capitalize text-[10px]">
@@ -107,6 +109,8 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
         {market.metadata.isTradable === false && (
           <Badge variant="destructive" className="text-[10px]">Not Tradable</Badge>
         )}
+        <EndpointBadge number={6} method="GET" path="/markets/{marketId}" description="Fetch market details including pricing and status" />
+        <EndpointBadge number={7} method="GET" path="/forecast" description="Aggregated forecast data for prediction markets" />
       </div>
 
       {/* Main grid: content left, trade panel right */}
@@ -135,13 +139,10 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
           {!hasMultipleMarkets && (
             <Card>
               <CardHeader className="pb-2">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium">Probability</CardTitle>
-                  <EndpointBadge number={6} method="GET" path="/markets/{marketId}" description="Fetch market details including pricing and status" />
-                </div>
+                <CardTitle className="text-sm font-medium">Probability</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex h-9 overflow-hidden rounded-full bg-muted text-sm font-semibold">
+                <div className="flex h-9 overflow-hidden rounded-sm bg-muted text-sm font-semibold">
                   <div
                     className="flex items-center justify-center bg-green-500 text-white transition-all"
                     style={{ width: `${yesPrice * 100}%` }}
@@ -155,6 +156,36 @@ export default function MarketPage({ params }: { params: Promise<{ marketId: str
               </CardContent>
             </Card>
           )}
+
+          {/* Tour-only fallback for step 13 when single-market event */}
+          {!hasMultipleMarkets && (
+            <EndpointBadge tourOnly number={13} method="GET" path="/events/{eventId}/markets" description="List all markets belonging to this event" />
+          )}
+
+          {/* Forecast (if available) */}
+          {forecast && Object.keys(forecast).length > 0 && (
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-medium">Forecast</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-xs text-muted-foreground">Forecast data available for this market.</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Orders */}
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium">Your Orders</CardTitle>
+                <EndpointBadge number={10} method="GET" path="/orders" description="List all orders for the connected wallet" />
+              </div>
+            </CardHeader>
+            <CardContent>
+              <OrdersList />
+            </CardContent>
+          </Card>
 
           {/* Rules */}
           {market.metadata.rulesPrimary && (

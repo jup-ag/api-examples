@@ -10,6 +10,7 @@ import { TradesFeed } from "@/components/trades-feed";
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { useTour, TOUR_STEPS } from "@/components/guided-tour";
 import { useLeaderboards, useVaultInfo } from "@/hooks/use-social";
+import { toRawUsd } from "@/lib/utils";
 
 export default function CommunityPage() {
   const [period, setPeriod] = useState("all_time");
@@ -38,15 +39,15 @@ export default function CommunityPage() {
             <Card>
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground">Total Platform Volume</p>
-                <p className="text-lg font-bold">
-                  ${(Number(leaderboard.summary.all_time?.totalVolumeUsd ?? 0) / 1_000_000).toLocaleString()}
+                <p className="font-mono text-lg font-bold">
+                  ${toRawUsd(leaderboard.summary.all_time?.totalVolumeUsd ?? 0).toLocaleString()}
                 </p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4">
                 <p className="text-xs text-muted-foreground">Total Predictions</p>
-                <p className="text-lg font-bold">{leaderboard.summary.all_time?.predictionsCount?.toLocaleString() ?? "—"}</p>
+                <p className="font-mono text-lg font-bold">{leaderboard.summary.all_time?.predictionsCount?.toLocaleString() ?? "—"}</p>
               </CardContent>
             </Card>
           </>
@@ -59,8 +60,8 @@ export default function CommunityPage() {
                 {vaultLoading ? (
                   <Skeleton className="mt-1 h-7 w-24" />
                 ) : (
-                  <p className="text-lg font-bold">
-                    {vaultInfo ? `$${(vaultInfo.vaultBalance / 1_000_000).toLocaleString()}` : "—"}
+                  <p className="font-mono text-lg font-bold">
+                    {vaultInfo ? `$${toRawUsd(vaultInfo.vaultBalance).toLocaleString()}` : "—"}
                   </p>
                 )}
               </div>

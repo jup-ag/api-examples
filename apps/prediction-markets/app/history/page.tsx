@@ -68,7 +68,7 @@ function HistoryItem({ event }: { event: HistoryEvent }) {
           {event.avgFillPriceUsd && <span>@ {toDisplayUsd(event.avgFillPriceUsd)}</span>}
           {event.feeUsd && <span>Fee: {toDisplayUsd(event.feeUsd)}</span>}
           {event.realizedPnl && (
-            <span className={cn(Number(event.realizedPnl) > 0 ? "text-green-600" : "text-red-600")}>
+            <span className={cn("font-mono", Number(event.realizedPnl) > 0 ? "text-emerald-400" : "text-red-400")}>
               PnL: {toDisplayUsd(event.realizedPnl)}
             </span>
           )}

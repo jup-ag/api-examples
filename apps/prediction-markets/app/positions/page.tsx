@@ -51,16 +51,16 @@ export default function PositionsPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Card>
+        <Card className="border-l-2 border-l-primary/50">
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Total Value</p>
-            <p className="text-lg font-bold">${totalValue.toFixed(2)}</p>
+            <p className="font-mono text-lg font-bold">${totalValue.toFixed(2)}</p>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="border-l-2 border-l-chart-2/50">
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Total PnL</p>
-            <p className={cn("text-lg font-bold", totalPnl > 0 ? "text-green-600" : totalPnl < 0 ? "text-red-600" : "")}>
+            <p className={cn("font-mono text-lg font-bold", totalPnl > 0 ? "text-emerald-400" : totalPnl < 0 ? "text-red-400" : "")}>
               ${totalPnl.toFixed(2)}
             </p>
           </CardContent>

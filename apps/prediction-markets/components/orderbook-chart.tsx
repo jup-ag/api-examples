@@ -9,13 +9,19 @@ import { useOrderbook } from "@/hooks/use-markets";
 export function OrderbookChart({ marketId }: { marketId: string }) {
   const { data: orderbook, isLoading } = useOrderbook(marketId);
 
-  if (isLoading) return <Skeleton className="h-64" />;
+  if (isLoading) return (
+    <div>
+      <Skeleton className="h-64" />
+      <EndpointBadge tourOnly number={8} method="GET" path="/orderbook/{marketId}" description="Fetch orderbook depth for YES and NO sides" />
+    </div>
+  );
 
   if (!orderbook) {
     return (
       <Card>
-        <CardContent className="flex h-64 items-center justify-center text-sm text-muted-foreground">
+        <CardContent className="flex h-64 flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
           No orderbook data available
+          <EndpointBadge tourOnly number={8} method="GET" path="/orderbook/{marketId}" description="Fetch orderbook depth for YES and NO sides" />
         </CardContent>
       </Card>
     );
@@ -41,8 +47,9 @@ export function OrderbookChart({ marketId }: { marketId: string }) {
   if (data.length === 0) {
     return (
       <Card>
-        <CardContent className="flex h-64 items-center justify-center text-sm text-muted-foreground">
+        <CardContent className="flex h-64 flex-col items-center justify-center gap-2 text-sm text-muted-foreground">
           No orderbook data available
+          <EndpointBadge tourOnly number={8} method="GET" path="/orderbook/{marketId}" description="Fetch orderbook depth for YES and NO sides" />
         </CardContent>
       </Card>
     );
@@ -59,11 +66,11 @@ export function OrderbookChart({ marketId }: { marketId: string }) {
       <CardContent>
         <div className="mb-3 flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-sm bg-green-500/70" />
+            <div className="h-3 w-3 rounded-sm bg-emerald-500" />
             <span className="text-muted-foreground">YES orders</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-sm bg-red-500/70" />
+            <div className="h-3 w-3 rounded-sm bg-red-500" />
             <span className="text-muted-foreground">NO orders</span>
           </div>
         </div>

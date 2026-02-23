@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, toRawUsd } from "@/lib/utils";
 import type { PredictionEvent } from "@/lib/api";
 
 export function EventCard({ event }: { event: PredictionEvent }) {
@@ -14,13 +14,13 @@ export function EventCard({ event }: { event: PredictionEvent }) {
     ? `/market/${firstMarket.marketId}?event=${event.eventId}`
     : `/discover`;
 
-  const yesPrice = (firstMarket?.pricing.buyYesPriceUsd ?? 500000) / 1_000_000;
-  const noPrice = (firstMarket?.pricing.buyNoPriceUsd ?? 500000) / 1_000_000;
+  const yesPrice = toRawUsd(firstMarket?.pricing.buyYesPriceUsd ?? 500000);
+  const noPrice = toRawUsd(firstMarket?.pricing.buyNoPriceUsd ?? 500000);
   const yesPercent = Math.round(yesPrice * 100);
 
   return (
     <Link href={href}>
-      <Card className="group gap-0 overflow-hidden py-0 transition-all hover:shadow-md">
+      <Card className="group gap-0 overflow-hidden py-0 transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_15px_-5px_rgba(199,242,132,0.12)]">
         {/* Image with category overlay */}
         <div className="relative aspect-[2/1] w-full overflow-hidden bg-muted">
           {event.metadata.imageUrl ? (
@@ -36,7 +36,7 @@ export function EventCard({ event }: { event: PredictionEvent }) {
               {event.category.charAt(0).toUpperCase()}
             </div>
           )}
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/60 to-transparent px-3 pb-2 pt-6">
+          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 bg-gradient-to-t from-black/80 via-black/30 to-transparent px-3 pb-2 pt-8">
             <Badge className="bg-black/50 text-[10px] text-white capitalize backdrop-blur-sm hover:bg-black/50">
               {event.category}
             </Badge>
@@ -58,7 +58,7 @@ export function EventCard({ event }: { event: PredictionEvent }) {
 
           {firstMarket && (
             <div className="space-y-1">
-              <div className="flex overflow-hidden rounded-full">
+              <div className="flex overflow-hidden rounded-sm">
                 <div
                   className="flex h-5 items-center justify-center bg-green-500 text-[10px] font-bold text-white"
                   style={{ width: `${yesPercent}%`, minWidth: "28px" }}
@@ -79,12 +79,12 @@ export function EventCard({ event }: { event: PredictionEvent }) {
             </div>
           )}
 
-          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+          <div className="flex items-center gap-3 font-mono text-[11px] text-muted-foreground">
             {event.volumeUsd && (
-              <span>Vol ${formatNumber(Number(event.volumeUsd) / 1_000_000)}</span>
+              <span>Vol ${formatNumber(toRawUsd(event.volumeUsd))}</span>
             )}
             {event.tvlDollars && (
-              <span>TVL ${formatNumber(Number(event.tvlDollars) / 1_000_000)}</span>
+              <span>TVL ${formatNumber(toRawUsd(event.tvlDollars))}</span>
             )}
             {marketCount > 1 && <span>{marketCount} markets</span>}
             {event.series && <span>{event.series}</span>}

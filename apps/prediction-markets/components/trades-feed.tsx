@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { EmptyState } from "@/components/empty-state";
 import { SkeletonList } from "@/components/skeleton-list";
-import { truncateAddress, timeAgo } from "@/lib/utils";
+import { truncateAddress, timeAgo, toRawUsd } from "@/lib/utils";
 import { useTrades } from "@/hooks/use-social";
 
 export function TradesFeed() {
@@ -54,8 +54,8 @@ export function TradesFeed() {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm font-medium">${(Number(trade.amountUsd) / 1_000_000).toFixed(2)}</p>
-            <p className="text-xs text-muted-foreground">@ ${(Number(trade.priceUsd) / 1_000_000).toFixed(4)}</p>
+            <p className="font-mono text-sm font-medium">${toRawUsd(trade.amountUsd).toFixed(2)}</p>
+            <p className="font-mono text-xs text-muted-foreground">@ ${toRawUsd(trade.priceUsd).toFixed(4)}</p>
           </div>
           <span className="text-xs text-muted-foreground">{timeAgo(trade.timestamp)}</span>
         </div>

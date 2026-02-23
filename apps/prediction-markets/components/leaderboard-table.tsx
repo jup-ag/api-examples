@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { EmptyState } from "@/components/empty-state";
 import { SkeletonList } from "@/components/skeleton-list";
-import { truncateAddress } from "@/lib/utils";
+import { cn, truncateAddress, toRawUsd } from "@/lib/utils";
 import type { LeaderboardEntry } from "@/lib/api";
 
 export function LeaderboardTable({
@@ -47,29 +47,29 @@ export function LeaderboardTable({
         <TableHeader>
           <TableRow>
             <TableHead className="w-12">#</TableHead>
-          <TableHead>Trader</TableHead>
-          <TableHead className="text-right">
-            {metric === "pnl" ? "PnL" : metric === "volume" ? "Volume" : "Win Rate"}
-          </TableHead>
-          <TableHead className="text-right">Predictions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {entries.map((entry, index) => (
-          <TableRow key={entry.ownerPubkey}>
-            <TableCell className="font-medium">{index + 1}</TableCell>
-            <TableCell className="font-mono text-xs">{truncateAddress(entry.ownerPubkey, 6)}</TableCell>
-            <TableCell className="text-right text-sm">
-              {metric === "pnl"
-                ? `$${(Number(entry.realizedPnlUsd ?? 0) / 1_000_000).toFixed(2)}`
-                : metric === "volume"
-                  ? `$${(Number(entry.totalVolumeUsd ?? 0) / 1_000_000).toFixed(2)}`
-                  : `${entry.winRatePct ?? "0"}%`}
-            </TableCell>
-            <TableCell className="text-right text-sm">{entry.predictionsCount ?? "—"}</TableCell>
+            <TableHead>Trader</TableHead>
+            <TableHead className="text-right">
+              {metric === "pnl" ? "PnL" : metric === "volume" ? "Volume" : "Win Rate"}
+            </TableHead>
+            <TableHead className="text-right">Predictions</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
+        </TableHeader>
+        <TableBody>
+          {entries.map((entry, index) => (
+            <TableRow key={entry.ownerPubkey}>
+              <TableCell className={cn("font-mono font-medium", index === 0 && "text-amber-400", index === 1 && "text-slate-300", index === 2 && "text-amber-600")}>{index + 1}</TableCell>
+              <TableCell className="font-mono text-xs">{truncateAddress(entry.ownerPubkey, 6)}</TableCell>
+              <TableCell className="text-right font-mono text-sm">
+                {metric === "pnl"
+                  ? `$${toRawUsd(entry.realizedPnlUsd ?? 0).toFixed(2)}`
+                  : metric === "volume"
+                    ? `$${toRawUsd(entry.totalVolumeUsd ?? 0).toFixed(2)}`
+                    : `${entry.winRatePct ?? "0"}%`}
+              </TableCell>
+              <TableCell className="text-right font-mono text-sm">{entry.predictionsCount ?? "—"}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </div>
   );

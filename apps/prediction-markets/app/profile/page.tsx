@@ -7,7 +7,7 @@ import { EndpointBadge } from "@/components/endpoint-badge";
 import { EmptyState } from "@/components/empty-state";
 import { SkeletonList } from "@/components/skeleton-list";
 import { useProfile } from "@/hooks/use-profile";
-import { cn } from "@/lib/utils";
+import { cn, toRawUsd } from "@/lib/utils";
 
 export default function ProfilePage() {
   const { publicKey } = useWallet();
@@ -26,20 +26,20 @@ export default function ProfilePage() {
     );
   }
 
-  const realizedPnl = Number(profile?.realizedPnlUsd ?? 0) / 1_000_000;
+  const realizedPnl = toRawUsd(profile?.realizedPnlUsd ?? 0);
   const correct = Number(profile?.correctPredictions ?? 0);
   const wrong = Number(profile?.wrongPredictions ?? 0);
 
   const stats = [
     { label: "Realized PnL", value: profile ? `$${realizedPnl.toFixed(2)}` : "—", highlight: true },
-    { label: "Total Volume", value: profile ? `$${(Number(profile.totalVolumeUsd) / 1_000_000).toFixed(2)}` : "—" },
+    { label: "Total Volume", value: profile ? `$${toRawUsd(profile.totalVolumeUsd).toFixed(2)}` : "—" },
     { label: "Predictions", value: profile?.predictionsCount ?? "—" },
     {
       label: "Win Rate",
       value: profile ? `${((correct / Math.max(correct + wrong, 1)) * 100).toFixed(1)}%` : "—",
     },
     { label: "Active Contracts", value: profile?.totalActiveContracts ?? "—" },
-    { label: "Portfolio Value", value: profile ? `$${(Number(profile.totalPositionsValueUsd) / 1_000_000).toFixed(2)}` : "—" },
+    { label: "Portfolio Value", value: profile ? `$${toRawUsd(profile.totalPositionsValueUsd).toFixed(2)}` : "—" },
   ];
 
   return (
@@ -61,10 +61,10 @@ export default function ProfilePage() {
                 <p className="text-xs text-muted-foreground">{stat.label}</p>
                 <p
                   className={cn(
-                    "mt-1 text-lg font-bold",
+                    "mt-1 font-mono text-lg font-bold",
                     stat.highlight &&
                       profile &&
-                      (realizedPnl > 0 ? "text-green-600" : realizedPnl < 0 ? "text-red-600" : "")
+                      (realizedPnl > 0 ? "text-emerald-400" : realizedPnl < 0 ? "text-red-400" : "")
                   )}
                 >
                   {stat.value}

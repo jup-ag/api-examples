@@ -107,8 +107,8 @@ export default function DiscoverPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Discover Events</h1>
-        <p className="text-sm text-muted-foreground">Explore prediction markets across categories</p>
+        <h1 className="text-2xl font-bold tracking-tight">Discover</h1>
+        <p className="text-sm text-muted-foreground">Prediction markets across categories</p>
       </div>
 
       <div className="flex items-center gap-3">
@@ -125,7 +125,7 @@ export default function DiscoverPage() {
           <select
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as SortOptionValue)}
-            className="h-9 appearance-none rounded-md border border-input bg-transparent py-2 pr-8 pl-3 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            className="h-9 appearance-none rounded-md border border-input bg-card py-2 pr-8 pl-3 text-sm shadow-none outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>

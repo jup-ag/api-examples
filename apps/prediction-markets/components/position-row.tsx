@@ -111,14 +111,14 @@ export function PositionRow({ position, onClose, isClosing }: PositionRowProps) 
             {position.isYes ? "YES" : "NO"}
           </Badge>
         </TableCell>
-        <TableCell className="text-xs">{position.contracts}</TableCell>
-        <TableCell className="text-xs">{toDisplayUsd(position.avgPriceUsd)}</TableCell>
-        <TableCell className="text-xs">{position.markPriceUsd ? toDisplayUsd(position.markPriceUsd) : "—"}</TableCell>
-        <TableCell className={cn("text-xs font-medium", pnl > 0 ? "text-green-600" : pnl < 0 ? "text-red-600" : "")}>
+        <TableCell className="font-mono text-xs">{position.contracts}</TableCell>
+        <TableCell className="font-mono text-xs">{toDisplayUsd(position.avgPriceUsd)}</TableCell>
+        <TableCell className="font-mono text-xs">{position.markPriceUsd ? toDisplayUsd(position.markPriceUsd) : "—"}</TableCell>
+        <TableCell className={cn("font-mono text-xs font-medium", pnl > 0 ? "text-emerald-400" : pnl < 0 ? "text-red-400" : "")}>
           {toDisplayUsd(position.pnlUsd ?? "0")} ({pnlPct > 0 ? "+" : ""}
           {pnlPct.toFixed(1)}%)
         </TableCell>
-        <TableCell className="text-xs">{position.valueUsd ? toDisplayUsd(position.valueUsd) : "—"}</TableCell>
+        <TableCell className="font-mono text-xs">{position.valueUsd ? toDisplayUsd(position.valueUsd) : "—"}</TableCell>
         <TableCell>
           <Button
             variant="outline"

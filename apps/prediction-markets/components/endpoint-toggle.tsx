@@ -33,7 +33,7 @@ export function EndpointProvider({ children }: { children: React.ReactNode }) {
       {children}
       {!isActive && (
         <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
-          <Button size="sm" onClick={handleStartTour} className="gap-2 rounded-full bg-blue-600 hover:bg-blue-700">
+          <Button size="sm" onClick={handleStartTour} className="gap-2 rounded-full">
             <Play className="h-3.5 w-3.5" />
             API Tour
           </Button>

@@ -12,10 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Check, Copy, LogOut, RefreshCw, Wallet } from "lucide-react";
-
-function truncateAddress(address: string) {
-  return `${address.slice(0, 4)}..${address.slice(-4)}`;
-}
+import { truncateAddress } from "@/lib/utils";
 
 export function WalletButton() {
   const { publicKey, wallet, disconnect, connecting } = useWallet();
@@ -46,7 +43,7 @@ export function WalletButton() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full gap-2 font-mono text-xs">
+        <Button variant="outline" className="w-full gap-2 font-mono text-xs border-border/50 hover:border-primary/30">
           {wallet?.adapter.icon && (
             <img src={wallet.adapter.icon} alt="" className="h-4 w-4 rounded-sm" />
           )}

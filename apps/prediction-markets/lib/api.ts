@@ -388,7 +388,7 @@ async function apiFetchPaginated<T>(path: string, options?: RequestInit): Promis
 
 // ─── Events ──────────────────────────────────────────────────────────────────
 
-export async function getEvents(params?: {
+export type EventsParams = {
   provider?: string;
   includeMarkets?: boolean;
   start?: number;
@@ -398,22 +398,14 @@ export async function getEvents(params?: {
   sortBy?: string;
   sortDirection?: string;
   filter?: string;
-}) {
-  return apiFetchList<PredictionEvent>(`/events${qs(params ?? {})}`);
+};
+
+export async function getEvents(params?: EventsParams) {
+  return apiFetchList<PredictionEvent>(`/events${qs((params ?? {}) as Record<string, unknown>)}`);
 }
 
-export async function getEventsPaginated(params?: {
-  provider?: string;
-  includeMarkets?: boolean;
-  start?: number;
-  end?: number;
-  category?: string;
-  subcategory?: string;
-  sortBy?: string;
-  sortDirection?: string;
-  filter?: string;
-}) {
-  return apiFetchPaginated<PredictionEvent>(`/events${qs(params ?? {})}`);
+export async function getEventsPaginated(params?: EventsParams) {
+  return apiFetchPaginated<PredictionEvent>(`/events${qs((params ?? {}) as Record<string, unknown>)}`);
 }
 
 export async function getEvent(eventId: string, includeMarkets?: boolean) {
@@ -432,10 +424,6 @@ export async function getSuggestedEvents(pubkey: string, provider?: string) {
 
 export async function getEventMarkets(eventId: string, params?: { start?: number; end?: number }) {
   return apiFetchList<Market>(`/events/${eventId}/markets${qs(params ?? {})}`);
-}
-
-export async function getEventMarket(eventId: string, marketId: string) {
-  return apiFetch<Market>(`/events/${eventId}/markets/${marketId}`);
 }
 
 export async function getMarket(marketId: string) {

@@ -2,9 +2,8 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Transaction, VersionedTransaction } from "@solana/web3.js";
 import { getPositions, getPosition, closePosition, closeAllPositions, claimPosition, type Position } from "@/lib/api";
-import { sendTransaction } from "@/lib/send-transaction";
+import { signAndSend } from "@/lib/send-transaction";
 import { toast } from "sonner";
 
 export function usePositions(ownerPubkey?: string) {
@@ -21,22 +20,6 @@ export function usePosition(positionPubkey: string) {
     queryFn: () => getPosition(positionPubkey),
     enabled: !!positionPubkey,
   });
-}
-
-async function signAndSend(
-  txBase64: string,
-  signTransaction: (tx: Transaction | VersionedTransaction) => Promise<Transaction | VersionedTransaction>,
-) {
-  const txBuffer = Buffer.from(txBase64, "base64");
-  let tx: Transaction | VersionedTransaction;
-  try {
-    tx = VersionedTransaction.deserialize(txBuffer);
-  } catch {
-    tx = Transaction.from(txBuffer);
-  }
-  const signed = await signTransaction(tx);
-  const serialized = signed.serialize();
-  return sendTransaction(serialized);
 }
 
 export function useClosePosition() {

@@ -2,10 +2,9 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { Transaction, VersionedTransaction } from "@solana/web3.js";
 import { getOrders, getOrder, getOrderStatus, createOrder } from "@/lib/api";
 import type { CreateOrderRequest } from "@/lib/api";
-import { sendTransaction } from "@/lib/send-transaction";
+import { signAndSend } from "@/lib/send-transaction";
 import { toast } from "sonner";
 
 export function useOrders(ownerPubkey?: string) {
@@ -52,18 +51,7 @@ export function useCreateOrder() {
 
       if (!response.transaction) throw new Error("No transaction returned");
 
-      const txBuffer = Buffer.from(response.transaction, "base64");
-      let tx: Transaction | VersionedTransaction;
-      try {
-        tx = VersionedTransaction.deserialize(txBuffer);
-      } catch {
-        tx = Transaction.from(txBuffer);
-      }
-
-      const signed = await signTransaction(tx);
-      const serialized = signed.serialize();
-      const signature = await sendTransaction(serialized);
-
+      const signature = await signAndSend(response.transaction, signTransaction);
       toast.info("Order submitted", { description: `Tx: ${signature.slice(0, 8)}...` });
 
       return { ...response, signature };

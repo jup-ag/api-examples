@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { usePnlHistory } from "@/hooks/use-profile";
+import { toRawUsd } from "@/lib/utils";
 
 const INTERVALS = [
   { label: "24h", value: "24h" },
@@ -18,13 +19,13 @@ const INTERVALS = [
 const COUNTS = ["10", "30", "50", "100"];
 
 export function PnlChart({ ownerPubkey }: { ownerPubkey: string }) {
-  const [interval, setInterval] = useState("1w");
+  const [timeInterval, setTimeInterval] = useState("1w");
   const [count, setCount] = useState(30);
-  const { data: pnlHistory, isLoading } = usePnlHistory(ownerPubkey, interval, count);
+  const { data: pnlHistory, isLoading } = usePnlHistory(ownerPubkey, timeInterval, count);
 
   const chartData = pnlHistory?.map((point) => ({
     timestamp: new Date(point.timestamp * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-    pnl: Number(point.realizedPnlUsd) / 1_000_000,
+    pnl: toRawUsd(point.realizedPnlUsd),
   }));
 
   return (
@@ -38,8 +39,8 @@ export function PnlChart({ ownerPubkey }: { ownerPubkey: string }) {
           <div className="flex items-center gap-3">
             <ToggleGroup
               type="single"
-              value={interval}
-              onValueChange={(val) => { if (val) setInterval(val); }}
+              value={timeInterval}
+              onValueChange={(val) => { if (val) setTimeInterval(val); }}
               size="sm"
             >
               {INTERVALS.map((i) => (
@@ -81,7 +82,7 @@ export function PnlChart({ ownerPubkey }: { ownerPubkey: string }) {
               <Line
                 type="monotone"
                 dataKey="pnl"
-                stroke="#22c55e"
+                stroke="#c7f284"
                 strokeWidth={2}
                 dot={false}
                 activeDot={{ r: 4 }}

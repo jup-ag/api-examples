@@ -160,12 +160,14 @@ export function TourProvider({ children }: { children: ReactNode }) {
 
   const startTour = useCallback(async () => {
     setStepIndex(0);
-    setPendingStepIndex(null);
     setIsActive(true);
     const step = TOUR_STEPS[0];
     if (!isOnPage(step.page, pathname)) {
+      setPendingStepIndex(0);
       const target = await resolvePath(step.page);
       if (target) router.push(target);
+    } else {
+      setPendingStepIndex(null);
     }
   }, [pathname, resolvePath, router]);
 
@@ -210,12 +212,30 @@ export function TourProvider({ children }: { children: ReactNode }) {
       {children}
       {isActive && !isNavigating && <TourOverlay step={TOUR_STEPS[stepIndex]} stepIndex={stepIndex} />}
       {isActive && isNavigating && createPortal(
-        <div className="fixed inset-0 z-[9999] bg-black/55 transition-opacity duration-200" />,
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/55 transition-opacity duration-200">
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-primary" />
+            <span className="text-xs text-muted-foreground">Navigating...</span>
+          </div>
+        </div>,
         document.body,
       )}
     </TourContext.Provider>
   );
 }
+
+// ─── Animation config ────────────────────────────────────────────────────────
+
+const EASE = "cubic-bezier(0.16, 1, 0.3, 1)"; // expo-out: fast start, smooth settle
+const DURATION = "0.4s";
+const SPOT_TRANSITION = [
+  `top ${DURATION} ${EASE}`,
+  `left ${DURATION} ${EASE}`,
+  `width ${DURATION} ${EASE}`,
+  `height ${DURATION} ${EASE}`,
+  `opacity ${DURATION} ${EASE}`,
+].join(", ");
+const POP_TRANSITION = `top ${DURATION} ${EASE}, left ${DURATION} ${EASE}, opacity 0.25s ease`;
 
 // ─── Overlay ────────────────────────────────────────────────────────────────
 
@@ -223,18 +243,34 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
   const { nextStep, prevStep, endTour, totalSteps } = useTour();
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [contentKey, setContentKey] = useState(0);
   const rafRef = useRef<number>(0);
 
   useEffect(() => { setMounted(true); }, []);
 
-  // Find & scroll to target element — keeps old rect visible during transition
+  // Find & scroll to target element.
+  // NOTE: We intentionally do NOT clear rect on same-page step changes so the
+  // spotlight smoothly slides from the old position to the new one via CSS.
   useEffect(() => {
     if (!mounted) return;
+
+    setContentKey((k) => k + 1); // trigger content fade
 
     let cancelled = false;
     let attempts = 0;
     let scrollTimer: ReturnType<typeof setTimeout>;
+    let settleIv: ReturnType<typeof setInterval>;
+    let settleTimeout: ReturnType<typeof setTimeout>;
     const maxAttempts = 20;
+
+    // Re-measure periodically for 2 s to absorb layout shifts (image loads, async data).
+    const startSettling = (el: Element) => {
+      settleIv = setInterval(() => {
+        if (cancelled) { clearInterval(settleIv); return; }
+        setRect(el.getBoundingClientRect());
+      }, 200);
+      settleTimeout = setTimeout(() => clearInterval(settleIv), 2000);
+    };
 
     const find = () => {
       const el = document.querySelector(`[data-tour-step="${step.number}"]`);
@@ -244,15 +280,19 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
 
         if (inView) {
           setRect(quickRect);
+          startSettling(el);
         } else {
           el.scrollIntoView({ behavior: "smooth", block: "center" });
           scrollTimer = setTimeout(() => {
             if (!cancelled) {
               rafRef.current = requestAnimationFrame(() => {
-                if (!cancelled) setRect(el.getBoundingClientRect());
+                if (!cancelled) {
+                  setRect(el.getBoundingClientRect());
+                  startSettling(el);
+                }
               });
             }
-          }, 250);
+          }, 350);
         }
         return true;
       }
@@ -268,17 +308,21 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
         cancelled = true;
         clearInterval(iv);
         clearTimeout(scrollTimer);
+        clearInterval(settleIv);
+        clearTimeout(settleTimeout);
         cancelAnimationFrame(rafRef.current);
       };
     }
     return () => {
       cancelled = true;
       clearTimeout(scrollTimer);
+      clearInterval(settleIv);
+      clearTimeout(settleTimeout);
       cancelAnimationFrame(rafRef.current);
     };
   }, [step.number, mounted]);
 
-  // Keep rect in sync on scroll / resize using rAF
+  // Keep rect in sync on scroll / resize
   useEffect(() => {
     if (!mounted) return;
     let ticking = false;
@@ -290,10 +334,7 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
     };
 
     const onEvent = () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
     };
 
     window.addEventListener("scroll", onEvent, { capture: true, passive: true });
@@ -307,48 +348,76 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
   if (!mounted) return null;
 
   const padding = 10;
+  const hasRect = rect !== null;
   const colors = METHOD_COLORS[step.method] ?? "";
   const group = pageGroupIndex(step);
 
-  // Popover positioning
+  // Popover position — always use absolute px so CSS transitions can interpolate.
+  const pw = 380;
+  const ph = 260;
   const popoverStyle = ((): React.CSSProperties => {
-    if (!rect) return { top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
-    const pw = 380;
-    const ph = 260;
+    if (!rect) {
+      return {
+        top: Math.round(window.innerHeight / 2 - ph / 2),
+        left: Math.round(window.innerWidth / 2 - pw / 2),
+        opacity: 1,
+      };
+    }
     const gap = 14;
     const safeLeft = Math.max(16, Math.min(rect.left, window.innerWidth - pw - 16));
-    if (rect.bottom + gap + ph < window.innerHeight) return { top: rect.bottom + gap, left: safeLeft };
-    if (rect.top - gap - ph > 0) return { top: rect.top - gap - ph, left: safeLeft };
-    return { top: Math.max(16, rect.top), left: Math.min(rect.right + gap, window.innerWidth - pw - 16) };
+    if (rect.bottom + gap + ph < window.innerHeight) return { top: rect.bottom + gap, left: safeLeft, opacity: 1 };
+    if (rect.top - gap - ph > 0) return { top: rect.top - gap - ph, left: safeLeft, opacity: 1 };
+    return { top: Math.max(16, rect.top), left: Math.min(rect.right + gap, window.innerWidth - pw - 16), opacity: 1 };
   })();
 
   return createPortal(
     <>
-      {/* Spotlight with shadow overlay */}
-      {rect && (
-        <div
-          className="fixed z-[10000] rounded-lg border-2 border-primary/80 pointer-events-none"
-          style={{
-            top: rect.top - padding,
-            left: rect.left - padding,
-            width: rect.width + padding * 2,
-            height: rect.height + padding * 2,
-            boxShadow: "0 0 0 9999px rgba(0,0,0,0.55), 0 0 30px 4px rgba(59,130,246,0.25)",
-            transition: "top 0.25s ease-out, left 0.25s ease-out, width 0.25s ease-out, height 0.25s ease-out",
-            willChange: "top, left, width, height",
-          }}
-        />
-      )}
+      {/* Spotlight — always rendered, opacity-driven visibility */}
+      <div
+        className="fixed z-[10000] rounded-lg pointer-events-none"
+        style={{
+          top: hasRect ? rect.top - padding : 0,
+          left: hasRect ? rect.left - padding : 0,
+          width: hasRect ? rect.width + padding * 2 : 0,
+          height: hasRect ? rect.height + padding * 2 : 0,
+          opacity: hasRect ? 1 : 0,
+          border: "2px solid oklch(0.89 0.17 128 / 0.8)",
+          boxShadow: "0 0 0 9999px rgba(0,0,0,0.55), 0 0 30px 4px rgba(199,242,132,0.15)",
+          transition: SPOT_TRANSITION,
+          willChange: "top, left, width, height, opacity",
+        }}
+      />
 
-      {/* Dark backdrop when element not found */}
-      {!rect && <div className="fixed inset-0 z-[9999] bg-black/55 transition-opacity duration-200" />}
+      {/* Fallback backdrop when spotlight not yet positioned */}
+      <div
+        className="fixed inset-0 z-[9999] pointer-events-none"
+        style={{
+          backgroundColor: "rgba(0,0,0,0.55)",
+          opacity: hasRect ? 0 : 1,
+          transition: `opacity 0.3s ${EASE}`,
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Click-blocker behind popover */}
+      <div className="fixed inset-0 z-[10000]" />
 
       {/* Popover card */}
       <div
-        className="fixed z-[10001] w-[380px] rounded-xl border border-border bg-popover p-5 shadow-2xl"
-        style={{ ...popoverStyle, transition: "top 0.25s ease-out, left 0.25s ease-out", willChange: "top, left" }}
+        className="fixed z-[10001] rounded-xl border border-border bg-popover shadow-2xl"
+        style={{
+          ...popoverStyle,
+          width: pw,
+          transition: POP_TRANSITION,
+          willChange: "top, left",
+        }}
       >
-        <div className="space-y-3">
+        {/* Animated content — re-keyed on step change to trigger fade */}
+        <div
+          key={contentKey}
+          className="p-5 space-y-3"
+          style={{ animation: `tourFadeIn 0.3s ${EASE} both` }}
+        >
           {/* Header row */}
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-medium text-muted-foreground">
@@ -374,7 +443,13 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
 
           {/* Progress bar */}
           <div className="h-1 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary transition-all duration-300" style={{ width: `${((stepIndex + 1) / totalSteps) * 100}%` }} />
+            <div
+              className="h-full rounded-full bg-primary"
+              style={{
+                width: `${((stepIndex + 1) / totalSteps) * 100}%`,
+                transition: `width 0.5s ${EASE}`,
+              }}
+            />
           </div>
 
           {/* Footer nav */}
@@ -386,7 +461,15 @@ function TourOverlay({ step, stepIndex }: { step: TourStep; stepIndex: number })
             {/* Page indicator dots */}
             <div className="flex items-center gap-1.5">
               {PAGE_LABELS.map((label, i) => (
-                <div key={label} className={cn("h-2 w-2 rounded-full transition-colors", group === i ? "bg-primary" : "bg-muted-foreground/25")} title={label} />
+                <div
+                  key={label}
+                  className={cn(
+                    "h-2 w-2 rounded-full",
+                    group === i ? "bg-primary" : "bg-muted-foreground/25",
+                  )}
+                  style={{ transition: `background-color 0.3s ${EASE}` }}
+                  title={label}
+                />
               ))}
             </div>
 

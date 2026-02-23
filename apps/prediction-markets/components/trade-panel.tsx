@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { EndpointBadge } from "@/components/endpoint-badge";
 import { useCreateOrder } from "@/hooks/use-orders";
 import type { Market } from "@/lib/api";
-import { cn } from "@/lib/utils";
+import { cn, toRawUsd } from "@/lib/utils";
 
 export function TradePanel({ market }: { market: Market }) {
   const { publicKey } = useWallet();
@@ -22,7 +22,7 @@ export function TradePanel({ market }: { market: Market }) {
     ? market.pricing.buyYesPriceUsd
     : market.pricing.buyNoPriceUsd;
 
-  const priceUsd = price ? price / 1_000_000 : null;
+  const priceUsd = price ? toRawUsd(price) : null;
   const chance = priceUsd ? (priceUsd * 100).toFixed(1) : "—";
   const parsedAmount = Number(amount);
   const estimatedContracts = priceUsd && parsedAmount > 0 ? (parsedAmount / priceUsd).toFixed(2) : "0";
@@ -60,13 +60,13 @@ export function TradePanel({ market }: { market: Market }) {
         <Separator />
 
         {/* Side toggle */}
-        <div className="grid grid-cols-2 gap-1.5 rounded-lg bg-muted p-1">
+        <div className="grid grid-cols-2 gap-1 rounded-md bg-muted/50 p-1">
           <button
             onClick={() => setIsYes(true)}
             className={cn(
               "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
               isYes
-                ? "bg-green-500 text-white shadow-sm"
+                ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/25"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -77,7 +77,7 @@ export function TradePanel({ market }: { market: Market }) {
             className={cn(
               "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
               !isYes
-                ? "bg-red-500 text-white shadow-sm"
+                ? "bg-red-500 text-white shadow-sm shadow-red-500/25"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -98,24 +98,24 @@ export function TradePanel({ market }: { market: Market }) {
             onChange={(e) => setAmount(e.target.value)}
             min="0"
             step="0.01"
-            className="text-lg font-semibold h-12"
+            className="text-lg font-mono font-semibold h-12"
           />
         </div>
 
         {/* Odds */}
-        <div className="rounded-lg bg-muted/50 p-3 space-y-2">
+        <div className="rounded-md border border-border/30 bg-muted/30 p-3 space-y-2">
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Odds</span>
-            <span className="font-semibold">{chance}% chance</span>
+            <span className="font-mono font-semibold">{chance}% chance</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="text-muted-foreground">Est. contracts</span>
-            <span className="font-medium">{estimatedContracts}</span>
+            <span className="font-mono font-medium">{estimatedContracts}</span>
           </div>
           {Number(amount) > 0 && (
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Potential payout</span>
-              <span className="font-medium text-green-600">${potentialPayout}</span>
+              <span className="font-mono font-medium text-emerald-400">${potentialPayout}</span>
             </div>
           )}
         </div>
@@ -125,8 +125,8 @@ export function TradePanel({ market }: { market: Market }) {
           className={cn(
             "w-full h-11 text-sm font-semibold",
             isYes
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-red-600 hover:bg-red-700"
+              ? "bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/20"
+              : "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20"
           )}
           onClick={handleSubmit}
           disabled={!publicKey || !isValidAmount || createOrder.isPending || market.metadata.isTradable === false}

@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useEvents, useSuggestedEvents } from "@/hooks/use-events";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, toRawUsd } from "@/lib/utils";
 
 export function RelatedEvents({ currentEventId }: { currentEventId?: string }) {
   const { publicKey } = useWallet();
@@ -35,7 +35,7 @@ export function RelatedEvents({ currentEventId }: { currentEventId?: string }) {
             <Link
               key={event.eventId}
               href={href}
-              className="flex items-center gap-3 rounded-lg border p-2.5 transition-colors hover:bg-muted/50"
+              className="flex items-center gap-3 rounded-lg border border-border/50 p-2.5 transition-all duration-200 hover:border-border hover:bg-muted/30"
             >
               {event.metadata.imageUrl ? (
                 <img
@@ -53,8 +53,8 @@ export function RelatedEvents({ currentEventId }: { currentEventId?: string }) {
                   {event.metadata.title}
                 </p>
                 {event.volumeUsd && (
-                  <p className="text-[11px] text-muted-foreground">
-                    ${formatNumber(Number(event.volumeUsd) / 1_000_000)} vol
+                  <p className="font-mono text-[11px] text-muted-foreground">
+                    ${formatNumber(toRawUsd(event.volumeUsd))} vol
                   </p>
                 )}
               </div>

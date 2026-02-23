@@ -17,7 +17,7 @@ export function TradingStatusDot() {
       <Tooltip>
         <TooltipTrigger asChild>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <div className={`h-2.5 w-2.5 rounded-full ${active ? "bg-green-500" : "bg-red-500"}`} />
+            <div className={`h-2.5 w-2.5 rounded-full transition-shadow ${active ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.4)]"}`} />
             {active ? "Trading Active" : "Trading Paused"}
           </div>
         </TooltipTrigger>
