@@ -76,13 +76,13 @@ export function MarketsTable({
                 <span className="font-mono text-sm font-semibold w-12 text-center">{chance}%</span>
                 <Badge
                   variant="outline"
-                  className="bg-green-500/10 text-green-600 border-green-500/20 text-xs font-semibold w-[70px] justify-center"
+                  className="bg-yes/10 text-yes border-yes/20 text-xs font-semibold w-[70px] justify-center"
                 >
                   Yes {yesCents}c
                 </Badge>
                 <Badge
                   variant="outline"
-                  className="bg-red-500/10 text-red-600 border-red-500/20 text-xs font-semibold w-[70px] justify-center"
+                  className="bg-no/10 text-no border-no/20 text-xs font-semibold w-[70px] justify-center"
                 >
                   No {noCents}c
                 </Badge>

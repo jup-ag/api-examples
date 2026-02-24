@@ -64,7 +64,7 @@ export default function ProfilePage() {
                     "mt-1 font-mono text-lg font-bold",
                     stat.highlight &&
                       profile &&
-                      (realizedPnl > 0 ? "text-emerald-400" : realizedPnl < 0 ? "text-red-400" : "")
+                      (realizedPnl > 0 ? "text-yes-soft" : realizedPnl < 0 ? "text-no-soft" : "")
                   )}
                 >
                   {stat.value}

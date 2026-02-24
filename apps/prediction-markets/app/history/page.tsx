@@ -32,11 +32,11 @@ const EVENT_ICONS: Record<string, React.ElementType> = {
 
 const EVENT_COLORS: Record<string, string> = {
   order_created: "text-blue-500",
-  order_filled: "text-green-500",
-  order_failed: "text-red-500",
+  order_filled: "text-yes",
+  order_failed: "text-no",
   payout_claimed: "text-yellow-500",
   position_updated: "text-muted-foreground",
-  position_lost: "text-red-500",
+  position_lost: "text-no",
 };
 
 function HistoryItem({ event }: { event: HistoryEvent }) {
@@ -68,7 +68,7 @@ function HistoryItem({ event }: { event: HistoryEvent }) {
           {event.avgFillPriceUsd && <span>@ {toDisplayUsd(event.avgFillPriceUsd)}</span>}
           {event.feeUsd && <span>Fee: {toDisplayUsd(event.feeUsd)}</span>}
           {event.realizedPnl && (
-            <span className={cn("font-mono", Number(event.realizedPnl) > 0 ? "text-emerald-400" : "text-red-400")}>
+            <span className={cn("font-mono", Number(event.realizedPnl) > 0 ? "text-yes-soft" : "text-no-soft")}>
               PnL: {toDisplayUsd(event.realizedPnl)}
             </span>
           )}

@@ -66,7 +66,7 @@ export function TradePanel({ market }: { market: Market }) {
             className={cn(
               "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
               isYes
-                ? "bg-emerald-500 text-white shadow-sm shadow-emerald-500/25"
+                ? "bg-yes text-white shadow-sm shadow-yes/25"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -77,7 +77,7 @@ export function TradePanel({ market }: { market: Market }) {
             className={cn(
               "rounded-md px-3 py-1.5 text-sm font-semibold transition-colors",
               !isYes
-                ? "bg-red-500 text-white shadow-sm shadow-red-500/25"
+                ? "bg-no text-white shadow-sm shadow-no/25"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
@@ -115,7 +115,7 @@ export function TradePanel({ market }: { market: Market }) {
           {Number(amount) > 0 && (
             <div className="flex items-center justify-between text-sm">
               <span className="text-muted-foreground">Potential payout</span>
-              <span className="font-mono font-medium text-emerald-400">${potentialPayout}</span>
+              <span className="font-mono font-medium text-yes-soft">${potentialPayout}</span>
             </div>
           )}
         </div>
@@ -125,8 +125,8 @@ export function TradePanel({ market }: { market: Market }) {
           className={cn(
             "w-full h-11 text-sm font-semibold",
             isYes
-              ? "bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/20"
-              : "bg-red-500 hover:bg-red-600 shadow-lg shadow-red-500/20"
+              ? "bg-yes hover:bg-yes/80 shadow-lg shadow-yes/20"
+              : "bg-no hover:bg-no/80 shadow-lg shadow-no/20"
           )}
           onClick={handleSubmit}
           disabled={!publicKey || !isValidAmount || createOrder.isPending || market.metadata.isTradable === false}

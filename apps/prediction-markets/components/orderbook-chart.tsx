@@ -66,11 +66,11 @@ export function OrderbookChart({ marketId }: { marketId: string }) {
       <CardContent>
         <div className="mb-3 flex items-center gap-4 text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-sm bg-emerald-500" />
+            <div className="h-3 w-3 rounded-sm bg-yes" />
             <span className="text-muted-foreground">YES orders</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-sm bg-red-500" />
+            <div className="h-3 w-3 rounded-sm bg-no" />
             <span className="text-muted-foreground">NO orders</span>
           </div>
         </div>
@@ -84,7 +84,7 @@ export function OrderbookChart({ marketId }: { marketId: string }) {
             />
             <Bar dataKey="size">
               {data.map((entry, index) => (
-                <Cell key={index} fill={entry.type === "yes" ? "#22c55e" : "#ef4444"} fillOpacity={0.7} />
+                <Cell key={index} fill={entry.type === "yes" ? "var(--color-yes)" : "var(--color-no)"} fillOpacity={0.7} />
               ))}
             </Bar>
           </BarChart>

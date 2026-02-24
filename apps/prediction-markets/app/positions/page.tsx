@@ -60,7 +60,7 @@ export default function PositionsPage() {
         <Card className="border-l-2 border-l-chart-2/50">
           <CardContent className="p-4">
             <p className="text-xs text-muted-foreground">Total PnL</p>
-            <p className={cn("font-mono text-lg font-bold", totalPnl > 0 ? "text-emerald-400" : totalPnl < 0 ? "text-red-400" : "")}>
+            <p className={cn("font-mono text-lg font-bold", totalPnl > 0 ? "text-yes-soft" : totalPnl < 0 ? "text-no-soft" : "")}>
               ${totalPnl.toFixed(2)}
             </p>
           </CardContent>

@@ -57,7 +57,7 @@ export function LeaderboardTable({
         <TableBody>
           {entries.map((entry, index) => (
             <TableRow key={entry.ownerPubkey}>
-              <TableCell className={cn("font-mono font-medium", index === 0 && "text-amber-400", index === 1 && "text-slate-300", index === 2 && "text-amber-600")}>{index + 1}</TableCell>
+              <TableCell className={cn("font-mono font-medium", index === 0 && "text-chart-1", index === 1 && "text-chart-2", index === 2 && "text-chart-3")}>{index + 1}</TableCell>
               <TableCell className="font-mono text-xs">{truncateAddress(entry.ownerPubkey, 6)}</TableCell>
               <TableCell className="text-right font-mono text-sm">
                 {metric === "pnl"

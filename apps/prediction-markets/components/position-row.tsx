@@ -114,7 +114,7 @@ export function PositionRow({ position, onClose, isClosing }: PositionRowProps) 
         <TableCell className="font-mono text-xs">{position.contracts}</TableCell>
         <TableCell className="font-mono text-xs">{toDisplayUsd(position.avgPriceUsd)}</TableCell>
         <TableCell className="font-mono text-xs">{position.markPriceUsd ? toDisplayUsd(position.markPriceUsd) : "—"}</TableCell>
-        <TableCell className={cn("font-mono text-xs font-medium", pnl > 0 ? "text-emerald-400" : pnl < 0 ? "text-red-400" : "")}>
+        <TableCell className={cn("font-mono text-xs font-medium", pnl > 0 ? "text-yes-soft" : pnl < 0 ? "text-no-soft" : "")}>
           {toDisplayUsd(position.pnlUsd ?? "0")} ({pnlPct > 0 ? "+" : ""}
           {pnlPct.toFixed(1)}%)
         </TableCell>

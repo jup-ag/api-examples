@@ -80,7 +80,23 @@ export default function DiscoverPage() {
   }, [category]);
 
   const isSearching = debouncedQuery.length >= 2;
-  const displayEvents = isSearching ? searchResults : events;
+  const sortedSearchResults = useMemo(() => {
+    if (!searchResults || sortOption === "default") return searchResults;
+    const sort = SORT_OPTIONS.find((o) => o.value === sortOption);
+    if (!sort?.sortBy) return searchResults;
+    return [...searchResults].sort((a, b) => {
+      let aVal: number, bVal: number;
+      if (sort.sortBy === "volume") {
+        aVal = parseFloat(a.volumeUsd ?? "0");
+        bVal = parseFloat(b.volumeUsd ?? "0");
+      } else {
+        aVal = a.beginAt ? new Date(a.beginAt).getTime() : 0;
+        bVal = b.beginAt ? new Date(b.beginAt).getTime() : 0;
+      }
+      return sort.sortDirection === "desc" ? bVal - aVal : aVal - bVal;
+    });
+  }, [searchResults, sortOption]);
+  const displayEvents = isSearching ? sortedSearchResults : events;
 
   // Infinite scroll sentinel
   const sentinelRef = useRef<HTMLDivElement | null>(null);

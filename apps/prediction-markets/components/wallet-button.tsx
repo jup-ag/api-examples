@@ -52,7 +52,7 @@ export function WalletButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" className="w-[var(--radix-dropdown-menu-trigger-width)]">
         <DropdownMenuItem onClick={copyAddress}>
-          {copied ? <Check className="text-green-500" /> : <Copy />}
+          {copied ? <Check className="text-yes" /> : <Copy />}
           {copied ? "Copied!" : "Copy address"}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setVisible(true)}>

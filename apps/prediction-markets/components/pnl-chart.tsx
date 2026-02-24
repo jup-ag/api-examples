@@ -82,7 +82,7 @@ export function PnlChart({ ownerPubkey }: { ownerPubkey: string }) {
               <Line
                 type="monotone"
                 dataKey="pnl"
-                stroke="#c7f284"
+                stroke="var(--color-primary)"
                 strokeWidth={2}
                 dot={false}
                 activeDot={{ r: 4 }}

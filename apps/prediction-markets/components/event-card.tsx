@@ -15,8 +15,8 @@ export function EventCard({ event }: { event: PredictionEvent }) {
     : `/discover`;
 
   const yesPrice = toRawUsd(firstMarket?.pricing.buyYesPriceUsd ?? 500000);
-  const noPrice = toRawUsd(firstMarket?.pricing.buyNoPriceUsd ?? 500000);
   const yesPercent = Math.round(yesPrice * 100);
+  const noPercent = 100 - yesPercent;
 
   return (
     <Link href={href}>
@@ -42,10 +42,10 @@ export function EventCard({ event }: { event: PredictionEvent }) {
             </Badge>
             <div className="flex gap-1">
               {event.isLive && (
-                <Badge className="bg-green-500/90 text-[10px] text-white hover:bg-green-500/90">Live</Badge>
+                <Badge className="bg-yes/10 text-[10px] text-yes-soft border border-yes/20 hover:bg-yes/10">Live</Badge>
               )}
               {event.isTrending && (
-                <Badge className="bg-orange-500/90 text-[10px] text-white hover:bg-orange-500/90">Trending</Badge>
+                <Badge className="bg-amber-500/10 text-[10px] text-amber-400 border border-amber-500/20 hover:bg-amber-500/10">Trending</Badge>
               )}
             </div>
           </div>
@@ -57,24 +57,21 @@ export function EventCard({ event }: { event: PredictionEvent }) {
           </h3>
 
           {firstMarket && (
-            <div className="space-y-1">
-              <div className="flex overflow-hidden rounded-sm">
-                <div
-                  className="flex h-5 items-center justify-center bg-green-500 text-[10px] font-bold text-white"
-                  style={{ width: `${yesPercent}%`, minWidth: "28px" }}
-                >
-                  {yesPercent}%
-                </div>
-                <div
-                  className="flex h-5 flex-1 items-center justify-center bg-red-400 text-[10px] font-bold text-white"
-                  style={{ minWidth: "28px" }}
-                >
-                  {Math.round(noPrice * 100)}%
-                </div>
+            <div className="space-y-1.5">
+              <div className="flex items-baseline justify-between">
+                <span className="font-mono text-xs font-semibold text-yes-soft">
+                  Yes {yesPercent}%
+                </span>
+                <span className="font-mono text-xs font-semibold text-no-soft">
+                  {noPercent}% No
+                </span>
               </div>
-              <div className="flex justify-between text-[10px] text-muted-foreground">
-                <span>Yes</span>
-                <span>No</span>
+              <div className="flex h-1.5 overflow-hidden rounded-full">
+                <div
+                  className="bg-yes transition-all"
+                  style={{ width: `${yesPercent}%` }}
+                />
+                <div className="flex-1 bg-no/40" />
               </div>
             </div>
           )}
