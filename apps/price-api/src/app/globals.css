@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+/* Jupiter-branded dark theme colors */
+@theme {
+  --color-jupiter-green: #00d4aa;
+  --color-jupiter-teal: #22d1ee;
+  --color-jupiter-dark: #0b0e14;
+  --color-jupiter-card: #131a25;
+  --color-jupiter-border: #1e2a3a;
+  --color-price-up: #00e676;
+  --color-price-down: #ff5252;
+}
+
+body {
+  background: var(--color-jupiter-dark);
+  color: #e2e8f0;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 1s ease-in-out infinite;
+}
+
+/* Smooth transition for the countdown ring */
+.countdown-ring {
+  transition: stroke-dashoffset 1s linear;
+}
