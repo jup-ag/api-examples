@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-jupiter-bg: #131722;
+  --color-jupiter-card: #1b1f2e;
+  --color-jupiter-border: #2a2f42;
+  --color-jupiter-hover: #232839;
+  --color-jupiter-green: #22c55e;
+  --color-jupiter-red: #ef4444;
+  --color-jupiter-accent: #c7f284;
+  --color-jupiter-accent-dim: #a3cc5a;
+  --color-jupiter-text: #e4e4e7;
+  --color-jupiter-muted: #71717a;
+  --color-jupiter-input: #0f1118;
+}
+
+body {
+  background-color: var(--color-jupiter-bg);
+  color: var(--color-jupiter-text);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+/* Solana wallet adapter overrides */
+.wallet-adapter-button {
+  background-color: var(--color-jupiter-accent) !important;
+  color: #131722 !important;
+  font-weight: 600 !important;
+  border-radius: 0.5rem !important;
+}
+
+.wallet-adapter-button:hover {
+  background-color: var(--color-jupiter-accent-dim) !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  background-color: var(--color-jupiter-card) !important;
+}
+
+.wallet-adapter-modal-button-close {
+  background-color: var(--color-jupiter-border) !important;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-jupiter-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-jupiter-border);
+  border-radius: 3px;
+}
