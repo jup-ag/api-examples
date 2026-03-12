@@ -1,6 +1,6 @@
 # Jupiter API Examples
 
-Example apps built with [Jupiter](https://jup.ag) APIs.
+Example apps built with [Jupiter](https://dev.jup.ag) APIs.
 
 ## Apps
 
