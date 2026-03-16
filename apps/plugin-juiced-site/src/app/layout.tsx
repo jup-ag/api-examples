@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "JUICED - Yield-Bearing JupUSD",
+  title: "Token Community Site — Jupiter Plugin Example",
   description:
-    "JUICED is Jupiter Lend's yield-bearing receipt token for JupUSD stablecoin deposits.",
+    "Example community site with an embedded Jupiter Plugin swap widget.",
 };
 
 export default function RootLayout({
