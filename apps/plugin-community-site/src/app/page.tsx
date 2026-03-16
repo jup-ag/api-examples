@@ -7,7 +7,7 @@ import Script from "next/script";
 // ============================================================
 
 // Your token's mint address — swap output will be locked to this
-const TOKEN_MINT = "jupSoLaHXQiZZTSfEWMTRRgpnyFm8f6sZdosWBjx93v";
+const TOKEN_MINT = "YOUR_TOKEN_MINT_ADDRESS";
 
 // Site content
 const TOKEN_NAME = "YOUR TOKEN";
@@ -19,9 +19,9 @@ const ACCENT = "#C7F284";
 
 // Stats (hardcode or fetch dynamically)
 const STATS = [
-  { value: "$1B+", label: "Total Supply" },
-  { value: "$100M+", label: "Earn Deposits" },
-  { value: "Awesome", label: "Community" },
+  { value: "$X", label: "Stat One" },
+  { value: "$Y", label: "Stat Two" },
+  { value: "TBD", label: "Stat Three" },
 ];
 
 // Footer links
@@ -33,6 +33,12 @@ const LINKS = [
 
 // ============================================================
 
+declare global {
+  interface Window {
+    Jupiter: { init: (config: Record<string, unknown>) => void };
+  }
+}
+
 export default function Home() {
   return (
     <main className="min-h-screen">
@@ -41,14 +47,19 @@ export default function Home() {
         <h1 className="text-6xl font-black tracking-tight mb-4">
           <span style={{ color: ACCENT }}>{TOKEN_NAME}</span>
         </h1>
-        <p className="text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">{TOKEN_DESCRIPTION}</p>
+        <p className="text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
+          {TOKEN_DESCRIPTION}
+        </p>
       </section>
 
       {/* Stats */}
       <section className="px-6 pb-12 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {STATS.map((stat) => (
-            <div key={stat.label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center">
+            <div
+              key={stat.label}
+              className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center"
+            >
               <p className="text-3xl font-bold" style={{ color: ACCENT }}>
                 {stat.value}
               </p>
@@ -60,10 +71,15 @@ export default function Home() {
 
       {/* Swap Widget */}
       <section className="px-6 pb-16 max-w-xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-6">Get {TOKEN_NAME}</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">
+          Get {TOKEN_NAME}
+        </h2>
 
         {/* Jupiter Plugin renders here */}
-        <div id="integrated-terminal" className="min-h-[500px] rounded-xl overflow-hidden" />
+        <div
+          id="integrated-terminal"
+          className="min-h-[500px] rounded-xl overflow-hidden"
+        />
       </section>
 
       {/* Jupiter Plugin — loads the swap widget and locks output to your token */}
@@ -72,7 +88,6 @@ export default function Home() {
         data-preload
         strategy="afterInteractive"
         onReady={() => {
-          // @ts-expect-error — Jupiter Plugin attaches to window
           window.Jupiter.init({
             displayMode: "integrated",
             integratedTargetId: "integrated-terminal",
@@ -94,10 +109,8 @@ export default function Home() {
               href={link.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors"
-              style={{ ["--accent" as string]: ACCENT }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = ACCENT)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "")}
+              className="transition-colors hover:text-[var(--accent)]"
+              style={{ "--accent": ACCENT } as React.CSSProperties}
             >
               {link.label}
             </a>
