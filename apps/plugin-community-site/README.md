@@ -56,6 +56,6 @@ Replace `TOKEN_MINT` with your token's mint address. `fixedMint` locks the outpu
 
 ## Resources
 
-- [Plugin Guide](https://dev.jup.ag/guides/how-to-embed-a-swap-widget)
-- [Plugin Docs](https://dev.jup.ag/tool-kits/plugin)
+- [Plugin Guide](https://dev.jup.ag/docs/guides/how-to-embed-a-swap-widget)
+- [Plugin Docs](https://dev.jup.ag/docs/tool-kits/plugin)
 - [Plugin Playground](https://plugin.jup.ag) (visual configurator)

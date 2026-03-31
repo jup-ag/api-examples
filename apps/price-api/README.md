@@ -43,7 +43,7 @@ src/app/
 
 ## API reference
 
-Guide: [How to get token price](https://dev.jup.ag/guides/how-to-get-token-price)
+Guide: [How to get token price](https://dev.jup.ag/docs/guides/how-to-get-token-price)
 
 ```
 GET https://api.jup.ag/price/v3?ids={comma_separated_mints}

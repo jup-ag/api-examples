@@ -28,7 +28,7 @@ const STATS = [
 const LINKS = [
   { label: "Website", href: "https://your-project.com" },
   { label: "Docs", href: "https://docs.your-project.com" },
-  { label: "Plugin Docs", href: "https://dev.jup.ag/tool-kits/plugin" },
+  { label: "Plugin Docs", href: "https://dev.jup.ag/docs/tool-kits/plugin" },
 ];
 
 // ============================================================
@@ -47,19 +47,14 @@ export default function Home() {
         <h1 className="text-6xl font-black tracking-tight mb-4">
           <span style={{ color: ACCENT }}>{TOKEN_NAME}</span>
         </h1>
-        <p className="text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">
-          {TOKEN_DESCRIPTION}
-        </p>
+        <p className="text-xl text-zinc-300 max-w-2xl mx-auto leading-relaxed">{TOKEN_DESCRIPTION}</p>
       </section>
 
       {/* Stats */}
       <section className="px-6 pb-12 max-w-4xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {STATS.map((stat) => (
-            <div
-              key={stat.label}
-              className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center"
-            >
+            <div key={stat.label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-6 text-center">
               <p className="text-3xl font-bold" style={{ color: ACCENT }}>
                 {stat.value}
               </p>
@@ -71,15 +66,10 @@ export default function Home() {
 
       {/* Swap Widget */}
       <section className="px-6 pb-16 max-w-xl mx-auto">
-        <h2 className="text-2xl font-bold text-center mb-6">
-          Get {TOKEN_NAME}
-        </h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Get {TOKEN_NAME}</h2>
 
         {/* Jupiter Plugin renders here */}
-        <div
-          id="integrated-terminal"
-          className="min-h-[500px] rounded-xl overflow-hidden"
-        />
+        <div id="integrated-terminal" className="min-h-[500px] rounded-xl overflow-hidden" />
       </section>
 
       {/* Jupiter Plugin — loads the swap widget and locks output to your token */}
