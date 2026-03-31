@@ -1,6 +1,6 @@
 # Jupiter Token Explorer
 
-Search and explore Solana tokens — powered by the [Jupiter Tokens API v2](https://dev.jup.ag/guides/how-to-get-token-information).
+Search and explore Solana tokens — powered by the [Jupiter Tokens API v2](https://dev.jup.ag/docs/guides/how-to-get-token-information).
 
 ## What it does
 
@@ -43,7 +43,7 @@ src/app/
 
 ## API reference
 
-Guide: [How to get token information](https://dev.jup.ag/guides/how-to-get-token-information)
+Guide: [How to get token information](https://dev.jup.ag/docs/guides/how-to-get-token-information)
 
 ```
 GET https://api.jup.ag/tokens/v2/search?query={query}

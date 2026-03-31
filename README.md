@@ -35,8 +35,6 @@ pnpm dev
 ## Resources
 
 - [Jupiter Developer Docs](https://dev.jup.ag)
-- [Jupiter Prediction Markets Guide](https://dev.jup.ag/guides/how-to-build-a-prediction-market-app-on-solana)
-- [Jupiter API Reference](https://dev.jup.ag/api)
 
 ## License
 

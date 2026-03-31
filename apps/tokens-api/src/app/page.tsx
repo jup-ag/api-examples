@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 
 // ---------------------------------------------------------------------------
 // Types — mirrors the Jupiter Tokens API v2 response shape
-// Docs: https://dev.jup.ag/guides/how-to-get-token-information
+// Docs: https://dev.jup.ag/docs/guides/how-to-get-token-information
 // ---------------------------------------------------------------------------
 
 interface TokenInfo {
@@ -96,21 +96,8 @@ function ScoreBadge({ score }: { score: number | null }) {
   );
 }
 
-function AuditRow({
-  label,
-  value,
-  status,
-}: {
-  label: string;
-  value: string;
-  status: "safe" | "warn" | "danger";
-}) {
-  const color =
-    status === "safe"
-      ? "text-green-600"
-      : status === "warn"
-        ? "text-orange-600"
-        : "text-red-600";
+function AuditRow({ label, value, status }: { label: string; value: string; status: "safe" | "warn" | "danger" }) {
+  const color = status === "safe" ? "text-green-600" : status === "warn" ? "text-orange-600" : "text-red-600";
 
   return (
     <div className="flex justify-between items-center px-3.5 py-2.5 bg-gray-50 rounded-[10px]">
@@ -120,15 +107,7 @@ function AuditRow({
   );
 }
 
-function TokenCard({
-  token,
-  animDelay,
-  isNew,
-}: {
-  token: TokenInfo;
-  animDelay?: number;
-  isNew?: boolean;
-}) {
+function TokenCard({ token, animDelay, isNew }: { token: TokenInfo; animDelay?: number; isNew?: boolean }) {
   const [flipped, setFlipped] = useState(false);
   const audit = token.audit || {};
 
@@ -150,9 +129,7 @@ function TokenCard({
                   className="w-12 h-12 rounded-full object-cover bg-gray-100 shrink-0"
                   onError={(e) => {
                     e.currentTarget.style.display = "none";
-                    e.currentTarget.nextElementSibling?.classList.remove(
-                      "hidden",
-                    );
+                    e.currentTarget.nextElementSibling?.classList.remove("hidden");
                   }}
                 />
               ) : null}
@@ -162,9 +139,7 @@ function TokenCard({
                 {token.symbol?.[0] || "?"}
               </div>
               <div className="min-w-0">
-                <div className="font-semibold text-base truncate flex items-center gap-1.5">
-                  {token.name}
-                </div>
+                <div className="font-semibold text-base truncate flex items-center gap-1.5">{token.name}</div>
                 <div className="text-[13px] text-gray-500 font-medium">
                   {token.symbol}
                   {token.isVerified ? " \u00B7 Verified" : ""}
@@ -185,96 +160,56 @@ function TokenCard({
 
           <div className="grid grid-cols-3 gap-1.5 mt-auto">
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                Market Cap
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmt(token.mcap)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Market Cap</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmt(token.mcap)}</div>
             </div>
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                Holders
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmtCount(token.holderCount)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Holders</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmtCount(token.holderCount)}</div>
             </div>
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                Price
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmtPrice(token.usdPrice)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Price</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmtPrice(token.usdPrice)}</div>
             </div>
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                Liquidity
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmt(token.liquidity)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Liquidity</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmt(token.liquidity)}</div>
             </div>
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                FDV
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmt(token.fdv)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">FDV</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmt(token.fdv)}</div>
             </div>
             <div className="bg-gray-50 rounded-[10px] px-2.5 py-2">
-              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">
-                Supply
-              </div>
-              <div className="text-[15px] font-semibold mt-0.5">
-                {fmtCount(token.circSupply)}
-              </div>
+              <div className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Supply</div>
+              <div className="text-[15px] font-semibold mt-0.5">{fmtCount(token.circSupply)}</div>
             </div>
           </div>
         </div>
 
         {/* Back face — audit info */}
         <div className="card-back">
-          <div className="text-[15px] font-bold text-gray-500 uppercase tracking-wider mb-1">
-            Audit Info
-          </div>
+          <div className="text-[15px] font-bold text-gray-500 uppercase tracking-wider mb-1">Audit Info</div>
           <AuditRow
             label="Mint Authority"
             value={
-              audit.mintAuthorityDisabled
-                ? "Renounced"
-                : audit.mintAuthorityDisabled === false
-                  ? "Active"
-                  : "Unknown"
+              audit.mintAuthorityDisabled ? "Renounced" : audit.mintAuthorityDisabled === false ? "Active" : "Unknown"
             }
             status={audit.mintAuthorityDisabled ? "safe" : "warn"}
           />
           <AuditRow
             label="Freeze Authority"
             value={
-              audit.freezeAuthorityDisabled
-                ? "None"
-                : audit.freezeAuthorityDisabled === false
-                  ? "Present"
-                  : "Unknown"
+              audit.freezeAuthorityDisabled ? "None" : audit.freezeAuthorityDisabled === false ? "Present" : "Unknown"
             }
             status={audit.freezeAuthorityDisabled ? "safe" : "warn"}
           />
           <AuditRow
             label="Top Holder Conc."
-            value={
-              audit.topHoldersPercentage != null
-                ? audit.topHoldersPercentage.toFixed(1) + "%"
-                : "\u2014"
-            }
+            value={audit.topHoldersPercentage != null ? audit.topHoldersPercentage.toFixed(1) + "%" : "\u2014"}
             status={
-              audit.topHoldersPercentage != null &&
-              audit.topHoldersPercentage < 20
+              audit.topHoldersPercentage != null && audit.topHoldersPercentage < 20
                 ? "safe"
-                : audit.topHoldersPercentage != null &&
-                    audit.topHoldersPercentage < 50
+                : audit.topHoldersPercentage != null && audit.topHoldersPercentage < 50
                   ? "warn"
                   : audit.topHoldersPercentage != null
                     ? "danger"
@@ -288,28 +223,15 @@ function TokenCard({
           />
           <AuditRow
             label="Dev Balance"
-            value={
-              audit.devBalancePercentage != null
-                ? audit.devBalancePercentage.toFixed(1) + "%"
-                : "\u2014"
-            }
-            status={
-              audit.devBalancePercentage != null &&
-              audit.devBalancePercentage > 5
-                ? "warn"
-                : "safe"
-            }
+            value={audit.devBalancePercentage != null ? audit.devBalancePercentage.toFixed(1) + "%" : "\u2014"}
+            status={audit.devBalancePercentage != null && audit.devBalancePercentage > 5 ? "warn" : "safe"}
           />
           <AuditRow
             label="Dev Mints"
             value={audit.devMints != null ? String(audit.devMints) : "\u2014"}
-            status={
-              audit.devMints != null && audit.devMints > 0 ? "warn" : "safe"
-            }
+            status={audit.devMints != null && audit.devMints > 0 ? "warn" : "safe"}
           />
-          <div className="mt-auto text-center text-xs text-gray-300">
-            Click to flip back
-          </div>
+          <div className="mt-auto text-center text-xs text-gray-300">Click to flip back</div>
         </div>
       </div>
     </div>
@@ -358,22 +280,19 @@ export default function Explorer() {
   const initialLoadRef = useRef(true);
 
   // Fetch from our API route (proxies Jupiter Tokens API v2)
-  const fetchTokens = useCallback(
-    async (endpoint: string, searchQuery?: string) => {
-      const params = new URLSearchParams({ endpoint });
-      if (searchQuery) params.set("query", searchQuery);
+  const fetchTokens = useCallback(async (endpoint: string, searchQuery?: string) => {
+    const params = new URLSearchParams({ endpoint });
+    if (searchQuery) params.set("query", searchQuery);
 
-      const res = await fetch(`/api/tokens?${params}`);
-      if (!res.ok) {
-        const body = await res.json();
-        throw new Error(body.error || `HTTP ${res.status}`);
-      }
+    const res = await fetch(`/api/tokens?${params}`);
+    if (!res.ok) {
+      const body = await res.json();
+      throw new Error(body.error || `HTTP ${res.status}`);
+    }
 
-      const data = await res.json();
-      return Array.isArray(data) ? (data as TokenInfo[]) : [];
-    },
-    [],
-  );
+    const data = await res.json();
+    return Array.isArray(data) ? (data as TokenInfo[]) : [];
+  }, []);
 
   // Load recent tokens
   const loadRecent = useCallback(
@@ -390,24 +309,20 @@ export default function Explorer() {
         }
 
         // Find new tokens not in current set
-        const newTokens = tokens.filter(
-          (t) => !knownIdsRef.current.has(t.id),
-        );
+        const newTokens = tokens.filter((t) => !knownIdsRef.current.has(t.id));
         if (newTokens.length === 0) return;
 
         newTokens.forEach((t) => knownIdsRef.current.add(t.id));
         setRecentTokens((prev) => [...newTokens.reverse(), ...prev].slice(0, 30));
       } catch (e) {
         if (!isRefresh) {
-          setError(
-            e instanceof Error ? e.message : "Failed to load recent tokens",
-          );
+          setError(e instanceof Error ? e.message : "Failed to load recent tokens");
           setLoading(false);
         }
         console.error("Recent error:", e);
       }
     },
-    [fetchTokens],
+    [fetchTokens]
   );
 
   // Start/stop auto-refresh
@@ -459,15 +374,13 @@ export default function Explorer() {
         }
       }, 350);
     },
-    [fetchTokens, startRefresh, stopRefresh],
+    [fetchTokens, startRefresh, stopRefresh]
   );
 
   return (
     <div className="max-w-[1200px] mx-auto">
       {/* Header */}
-      <h1 className="text-[32px] font-bold text-center mb-2 tracking-tight">
-        Jupiter Token Gallery
-      </h1>
+      <h1 className="text-[32px] font-bold text-center mb-2 tracking-tight">Jupiter Token Gallery</h1>
       <p className="text-center text-gray-500 text-[15px] mb-8">
         Search Solana tokens powered by the Jupiter Tokens API
       </p>
@@ -497,23 +410,15 @@ export default function Explorer() {
       </div>
 
       {/* Error */}
-      {error && (
-        <div className="text-center text-gray-400 py-12 text-[15px]">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-center text-gray-400 py-12 text-[15px]">{error}</div>}
 
       {/* Recently Listed */}
       {!isSearchActive && (
         <div>
-          <div className="text-xl font-semibold mb-4 flex items-center gap-2">
-            Recently Listed
-          </div>
+          <div className="text-xl font-semibold mb-4 flex items-center gap-2">Recently Listed</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
             {loading
-              ? Array.from({ length: 6 }).map((_, i) => (
-                  <SkeletonCard key={i} />
-                ))
+              ? Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
               : recentTokens.map((token, i) => (
                   <TokenCard
                     key={token.id}
@@ -529,13 +434,9 @@ export default function Explorer() {
       {/* Search Results */}
       {isSearchActive && (
         <div>
-          <div className="text-xl font-semibold mb-4 flex items-center gap-2">
-            Search Results
-          </div>
+          <div className="text-xl font-semibold mb-4 flex items-center gap-2">Search Results</div>
           {searching ? (
-            <div className="text-center text-gray-400 py-12 text-[15px]">
-              Searching...
-            </div>
+            <div className="text-center text-gray-400 py-12 text-[15px]">Searching...</div>
           ) : searchResults.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
               {searchResults.map((token) => (
@@ -543,9 +444,7 @@ export default function Explorer() {
               ))}
             </div>
           ) : (
-            <div className="text-center text-gray-400 py-12 text-[15px]">
-              No tokens found.
-            </div>
+            <div className="text-center text-gray-400 py-12 text-[15px]">No tokens found.</div>
           )}
         </div>
       )}

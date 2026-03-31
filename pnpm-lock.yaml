@@ -19,6 +19,37 @@ importers:
         specifier: ^2.4.4
         version: 2.8.9
 
+  apps/plugin-community-site:
+    dependencies:
+      next:
+        specifier: ^15.1.7
+        version: 15.5.12(@babel/core@7.29.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@tailwindcss/postcss':
+        specifier: ^4.0.9
+        version: 4.2.1
+      '@types/node':
+        specifier: ^22.13.4
+        version: 22.19.11
+      '@types/react':
+        specifier: ^19.0.8
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.0.3
+        version: 19.2.3(@types/react@19.2.14)
+      tailwindcss:
+        specifier: ^4.0.9
+        version: 4.2.1
+      typescript:
+        specifier: ^5.7.3
+        version: 5.9.3
+
   apps/prediction-API-video-demo:
     dependencies:
       '@solana/wallet-adapter-base':
@@ -10963,7 +10994,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.19.11
+      '@types/node': 25.4.0
 
   '@types/d3-array@3.2.2': {}
 
@@ -11041,11 +11072,11 @@ snapshots:
 
   '@types/ws@7.4.7':
     dependencies:
-      '@types/node': 22.19.11
+      '@types/node': 25.4.0
 
   '@types/ws@8.18.1':
     dependencies:
-      '@types/node': 22.19.11
+      '@types/node': 25.4.0
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -15114,7 +15145,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 22.19.11
+      '@types/node': 25.4.0
       long: 5.2.5
 
   proxy-compare@2.6.0: {}
