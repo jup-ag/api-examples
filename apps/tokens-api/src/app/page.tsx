@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 
 // ---------------------------------------------------------------------------
 // Types — mirrors the Jupiter Tokens API v2 response shape
-// Docs: https://dev.jup.ag/docs/guides/how-to-get-token-information
+// Docs: https://developers.jup.ag/docs/guides/how-to-get-token-information
 // ---------------------------------------------------------------------------
 
 interface TokenInfo {

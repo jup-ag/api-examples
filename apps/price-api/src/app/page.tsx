@@ -33,7 +33,7 @@ const REFRESH_INTERVAL = 10;
 
 // ---------------------------------------------------------------------------
 // Types — mirrors the Jupiter Price API v3 response shape
-// Docs: https://dev.jup.ag/docs/price/v3
+// Docs: https://developers.jup.ag/docs/price
 // ---------------------------------------------------------------------------
 
 interface TokenPrice {
@@ -379,7 +379,7 @@ export default function Dashboard() {
       <footer className="mt-12 text-center text-xs text-slate-600">
         Data from{" "}
         <a
-          href="https://dev.jup.ag/docs/price/v3"
+          href="https://developers.jup.ag/docs/price"
           target="_blank"
           rel="noopener noreferrer"
           className="text-jupiter-green hover:underline"

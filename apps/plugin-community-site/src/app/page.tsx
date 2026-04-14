@@ -28,7 +28,7 @@ const STATS = [
 const LINKS = [
   { label: "Website", href: "https://your-project.com" },
   { label: "Docs", href: "https://docs.your-project.com" },
-  { label: "Plugin Docs", href: "https://dev.jup.ag/docs/tool-kits/plugin" },
+  { label: "Plugin Docs", href: "https://developers.jup.ag/docs/tool-kits/plugin" },
 ];
 
 // ============================================================
