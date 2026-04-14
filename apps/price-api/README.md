@@ -1,6 +1,6 @@
 # Jupiter Price API Dashboard
 
-Live token price dashboard for SOL, JUP, and USDC — powered by the [Jupiter Price API v3](https://dev.jup.ag/docs/price/v3).
+Live token price dashboard for SOL, JUP, and USDC — powered by the [Jupiter Price API v3](https://developers.jup.ag/docs/price).
 
 ## What it does
 
@@ -43,7 +43,7 @@ src/app/
 
 ## API reference
 
-Guide: [How to get token price](https://dev.jup.ag/docs/guides/how-to-get-token-price)
+Guide: [How to get token price](https://developers.jup.ag/docs/guides/how-to-get-token-price)
 
 ```
 GET https://api.jup.ag/price/v3?ids={comma_separated_mints}

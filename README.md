@@ -1,6 +1,6 @@
 # Jupiter API Examples
 
-Example apps built with [Jupiter](https://dev.jup.ag) APIs.
+Example apps built with [Jupiter](https://developers.jup.ag/docs) APIs.
 
 ## Apps
 
@@ -34,7 +34,7 @@ pnpm dev
 
 ## Resources
 
-- [Jupiter Developer Docs](https://dev.jup.ag)
+- [Jupiter Developer Docs](https://developers.jup.ag/docs)
 
 ## License
 

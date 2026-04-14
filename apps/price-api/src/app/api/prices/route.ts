@@ -11,7 +11,7 @@ const MINTS = [
 /**
  * Proxies the Jupiter Price API v3 to keep the API key server-side.
  *
- * Jupiter Price API docs: https://dev.jup.ag/docs/price/v3
+ * Jupiter Price API docs: https://developers.jup.ag/docs/price
  *
  * Response shape per token:
  * {
